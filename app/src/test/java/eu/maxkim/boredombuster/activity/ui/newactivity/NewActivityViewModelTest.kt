@@ -6,12 +6,30 @@ import eu.maxkim.boredombuster.activity.usecase.GetRandomActivity
 import eu.maxkim.boredombuster.activity.usecase.IsActivitySaved
 import eu.maxkim.boredombuster.activity.usecase.SaveActivity
 import eu.maxkim.boredombuster.model.Result
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Test
 import java.lang.RuntimeException
-
+@OptIn(ExperimentalCoroutinesApi::class)
 class NewActivityViewModelTest{
 
+    private val testDispatcher = StandardTestDispatcher()
+
+    @Before
+    fun setUp() {
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
     @Test
     fun `creating a viewmodel exposes loading ui state`() {
         // Arrange
