@@ -14,22 +14,14 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import java.lang.RuntimeException
 @OptIn(ExperimentalCoroutinesApi::class)
 class NewActivityViewModelTest{
 
-    private val testDispatcher = StandardTestDispatcher()
-
-    @Before
-    fun setUp() {
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
+    @get:Rule
+    val coroutinesTestRules = CoroutinesTestRules()
     @Test
     fun `creating a viewmodel exposes loading ui state`() {
         // Arrange
