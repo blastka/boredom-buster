@@ -6,10 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import eu.maxkim.boredombuster.activity.model.Activity
+import eu.maxkim.boredombuster.activity.ui.newactivity.CoroutinesTestRules
 import eu.maxkim.boredombuster.activity.ui.newactivity.activity1
 import eu.maxkim.boredombuster.activity.ui.newactivity.activity2
 import eu.maxkim.boredombuster.activity.usecase.DeleteActivity
 import eu.maxkim.boredombuster.activity.usecase.GetFavoriteActivities
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
@@ -32,6 +36,10 @@ class FavoritesViewModelTest {
 
     @get:Rule
     val instant = InstantTaskExecutorRule()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @get:Rule
+    val coroutineRule = CoroutinesTestRules()
 
     private val mockGetFavoriteActivities: GetFavoriteActivities = mock()
     private val mockDeleteActivity: DeleteActivity = mock()
@@ -77,9 +85,25 @@ class FavoritesViewModelTest {
         viewModel.uiStateLiveData.observeForever(activityObserver)
 
         verify(activityObserver, times(1)).onChanged(activityListCaptor.capture())
-        //отлов изменения livedata
+        //отлов изменения livedata, проверка взаимодействия
 
         assert(activityListCaptor.value is FavoritesUiState.Empty)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `calling deleteActivity() interacts with the correct use case`() {
+        runTest {  // потому что есть вызов саспенд метода invoke
+            val viewModel = FavoritesViewModel(
+                mockGetFavoriteActivities,
+                mockDeleteActivity
+            )
+            // Act
+            viewModel.deleteActivity(activity1)
+            advanceUntilIdle()//ждем завершения корутин
+            verify(mockDeleteActivity, times(1)).invoke(activity1)
+            //проверяем вообще был ли вызов deleteActivity.invoke
+        }
     }
 }
 
