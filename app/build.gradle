@@ -96,7 +96,7 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_test_version"
     testImplementation "androidx.arch.core:core-testing:$arch_testing_version"
     testImplementation "org.mockito.kotlin:mockito-kotlin:$mockito_kotlin_version"
-
+    testImplementation "com.squareup.okhttp3:mockwebserver:$okhttp_version"
 
     // Android Test
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
