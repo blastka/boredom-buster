@@ -31,25 +31,24 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-@RunWith(MockitoJUnitRunner::class)
+@RunWith(MockitoJUnitRunner::class)//для использования методов моков
 class FavoritesViewModelTest {
 
     @get:Rule
-    val instant = InstantTaskExecutorRule()
+    val instant = InstantTaskExecutorRule()//делает лайвдату синхронной
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @get:Rule
-    val coroutineRule = CoroutinesTestRules()
+    val coroutineRule = CoroutinesTestRules()//замена диспетчеров в тесте
 
     private val mockGetFavoriteActivities: GetFavoriteActivities = mock()
     private val mockDeleteActivity: DeleteActivity = mock()
 
 
-    private val activityObserver: Observer<FavoritesUiState> = mock()
+    private val activityObserver: Observer<FavoritesUiState> = mock()//тестовый обсервер
 
     @Captor
-    private lateinit var activityListCaptor: ArgumentCaptor<FavoritesUiState>
-    //используется вместе с обсервером, механизм захвата результата
+    private lateinit var activityListCaptor: ArgumentCaptor<FavoritesUiState> //используется вместе с обсервером, механизм захвата результата
 
     @Test
     fun `the view model maps list of activities to list ui state`() {
@@ -61,10 +60,10 @@ class FavoritesViewModelTest {
         //при вызове метода invoke у объекта должно возвращаться livedataReturn
 
         val viewModel = FavoritesViewModel(mockGetFavoriteActivities, mockDeleteActivity)
-        viewModel.uiStateLiveData.observeForever(activityObserver)
+        viewModel.uiStateLiveData.observeForever(activityObserver)//пишем на что реагировать (мб метод) первое, подписка один вызов
 
-        verify(activityObserver, times(1)).onChanged(activityListCaptor.capture())
-        //отлов изменения livedata
+        verify(activityObserver, times(1)).onChanged(activityListCaptor.capture())//ожидается 1 раз вызова onChanged у обсервера второе
+        //capture отлов значения livedata в activityListCaptor
 
         assert(activityListCaptor.value is FavoritesUiState.List)
 
