@@ -15,7 +15,9 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "eu.maxkim.boredombuster.di.HiltTestRunner"
+
         vectorDrawables {
             useSupportLibrary true
         }
@@ -106,5 +108,15 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:$arch_testing_version"
     androidTestImplementation "org.mockito:mockito-android:$mockito_android_version"
     androidTestImplementation "org.mockito.kotlin:mockito-kotlin:$mockito_kotlin_version"
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:$okhttp_version"
 
+    androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+}
+
+configurations.all {
+    resolutionStrategy {
+        force "com.squareup.okhttp3:okhttp:$okhttp_version"
+    }
 }
