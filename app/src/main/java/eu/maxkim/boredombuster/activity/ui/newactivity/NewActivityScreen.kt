@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -136,7 +137,7 @@ fun NewActivityCard(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 TextButton(
-                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally).testTag(Tags.ActivityLink),
                     onClick = {
                         onLinkClick(activity.link)
                     }
@@ -222,4 +223,9 @@ fun Preview_NewActivityCard() {
             onLinkClick = { }
         )
     }
+}
+
+object Tags {
+
+    const val ActivityLink = "tag_activity_link"
 }

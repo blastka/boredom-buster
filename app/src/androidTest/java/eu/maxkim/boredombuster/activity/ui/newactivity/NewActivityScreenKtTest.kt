@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
@@ -60,5 +61,23 @@ class NewActivityScreenKtTest{
         val contentDescription = ApplicationProvider.getApplicationContext<Context>().getString(R.string.cd_save_activity)//получили контекст и стрингу
         composeTestRule.onNodeWithContentDescription(contentDescription).performClick()//кликаем по элементу с этим содержимым, то есть строкой в contentDescription компоуза
         verify(onFavoriteClick, times(1)).invoke(!isFavorite)
+    }
+
+    @Test
+    fun onLinkClickCallbackIsTriggered() {
+        val onLinkClick: (link: String) -> Unit = mock()
+
+        composeTestRule.setContent {//отображаем
+            NewActivityCard(
+                modifier = Modifier.fillMaxWidth(),
+                activity = androidActivity1,
+                isFavorite = false,
+                onFavoriteClick = { },
+                onLinkClick = onLinkClick
+            )
+        }
+
+        composeTestRule.onNodeWithTag(Tags.ActivityLink).performClick()
+        verify(onLinkClick, times(1)).invoke(androidActivity1.link)
     }
 }
